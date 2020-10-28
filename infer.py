@@ -7,9 +7,9 @@ from PIL import Image
 from utils.anchor_generator import generate_anchors
 from utils.anchor_decode import decode_bbox
 from utils.nms import single_class_non_max_suppression
-from load_model.loader import load_tf_model, tf_inference
+from load_model.loader import load_model, model_inference
 
-sess, graph = load_tf_model('models/face_mask_detection.pb')
+sess, graph = load_model('face_mask_detection.pb')
 feature_map_sizes = [[33, 33], [17, 17], [9, 9], [5, 5], [3, 3]]
 anchor_sizes = [[0.04, 0.056], [0.08, 0.11], [0.16, 0.22], [0.32, 0.45], [0.64, 0.72]]
 anchor_ratios = [[1, 0.62, 0.42]] * 5
@@ -33,7 +33,7 @@ def inference(image,
     image_resized = cv2.resize(image, target_shape)
     image_np = image_resized / 255.0  
     image_exp = np.expand_dims(image_np, axis=0)
-    y_bboxes_output, y_cls_output = tf_inference(sess, graph, image_exp)
+    y_bboxes_output, y_cls_output = model_inference(sess, graph, image_exp)
 
     y_bboxes = decode_bbox(anchors_exp, y_bboxes_output)[0]
     y_cls = y_cls_output[0]

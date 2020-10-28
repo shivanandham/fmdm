@@ -4,13 +4,11 @@ if tf.__version__ > '2':
 
 import numpy as np
 
-PATH_TO_MODEL = 'models/face_mask_detection.pb'
-
-def load_tf_model(tf_model_path):
+def load_model(model_path):
     detection_graph = tf.Graph()
     with detection_graph.as_default():
         od_graph_def = tf.GraphDef()
-        with tf.gfile.GFile(tf_model_path, 'rb') as fid:
+        with tf.gfile.GFile(model_path, 'rb') as fid:
             serialized_graph = fid.read()
             od_graph_def.ParseFromString(serialized_graph)
             tf.import_graph_def(od_graph_def, name='')
@@ -19,7 +17,7 @@ def load_tf_model(tf_model_path):
                 return sess, detection_graph
 
 
-def tf_inference(sess, detection_graph, img_arr):
+def model_inference(sess, detection_graph, img_arr):
     image_tensor = detection_graph.get_tensor_by_name('data_1:0')
     detection_bboxes = detection_graph.get_tensor_by_name('loc_branch_concat_1/concat:0')
     detection_scores = detection_graph.get_tensor_by_name('cls_branch_concat_1/concat:0')
