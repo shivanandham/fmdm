@@ -14,13 +14,13 @@ def generate_anchors(feature_map_sizes, anchor_sizes, anchor_ratios, offset=0.5)
         center_tiled = np.tile(center, (1, 1, 2* num_anchors))
         anchor_width_heights = []
 
-                for scale in anchor_sizes[idx]:
+        for scale in anchor_sizes[idx]:
             ratio = anchor_ratios[idx][0]
             width = scale * np.sqrt(ratio)
             height = scale / np.sqrt(ratio)
             anchor_width_heights.extend([-width / 2.0, -height / 2.0, width / 2.0, height / 2.0])
 
-               for ratio in anchor_ratios[idx][1:]:
+        for ratio in anchor_ratios[idx][1:]:
             s1 = anchor_sizes[idx][0] 
             width = s1 * np.sqrt(ratio)
             height = s1 / np.sqrt(ratio)
